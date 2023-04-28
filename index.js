@@ -1,10 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
+import usermanagementRoutes from "./routes/usermanagement.js";
+import reservationmanagementRoutes from "./routes/reservationmanagement.js";
+import roommanagementRoutes from "./routes/roommanagement.js";
+import ratemanagementRoutes from "./routes/ratemanagement.js";
+import billingmanagementRoutes from "./routes/billingmanagement.js";
+import customermanagementRoutes from "./routes/customermanagement.js";
 
 //Configuration
 dotenv.config();
@@ -17,6 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
+
 //ROUTES 
 app.use("/usermanagement", usermanagementRoutes);
 app.use("/reservationmanagement", reservationmanagementRoutes);
@@ -24,8 +30,11 @@ app.use("/roommanagement", roommanagementRoutes);
 app.use("/ratemanagement", ratemanagementRoutes);
 app.use("/billingmanagement", billingmanagementRoutes);
 app.use("/customermanagement", customermanagementRoutes);
-app.use("/maintenance", maintenanceRoutes);
 
+
+app.listen(3000, function () {
+    console.log("server started at port 3000");
+})
 
 
 
