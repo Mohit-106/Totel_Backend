@@ -4,7 +4,6 @@ const app = express();
 
 // Create a new user
 app.post("/users", async (req, res) => {
-    console.log("hi from user post")
   try {
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
@@ -78,13 +77,4 @@ export default app;
 
 
 
-// {
-//     "name":
-//     "Mohit",
-//     "email":
-//     "mohit@gmail.com",
-//     "password":
-//     "123456",
-//     "role":
-//     "Admin"
-//     }
+

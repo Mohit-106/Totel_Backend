@@ -4,9 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-
 const DATABASE_URL="mongodb+srv://admin:JVbzCDVeKr0JnODE@cluster0.meiuaxw.mongodb.net/?retryWrites=true&w=majority";
-
 // Load environment variables
 dotenv.config();
 

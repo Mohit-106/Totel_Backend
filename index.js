@@ -22,7 +22,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
-
 //ROUTES 
 app.use("/usermanagement", usermanagementRoutes);
 app.use("/reservationmanagement", reservationmanagementRoutes);
@@ -30,7 +29,6 @@ app.use("/roommanagement", roommanagementRoutes);
 app.use("/ratemanagement", ratemanagementRoutes);
 app.use("/billingmanagement", billingmanagementRoutes);
 app.use("/customermanagement", customermanagementRoutes);
-
 
 app.listen(3000, function () {
     console.log("server started at port 3000");
