@@ -1,1 +1,0 @@
-const DATABASE_URL="mongodb+srv://admin:JVbzCDVeKr0JnODE@cluster0.meiuaxw.mongodb.net/?retryWrites=true&w=majority"; 

@@ -4,10 +4,10 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-const DATABASE_URL="mongodb+srv://admin:JVbzCDVeKr0JnODE@cluster0.meiuaxw.mongodb.net/?retryWrites=true&w=majority";
+const DATABASE_URL="mongodb+srv://mwkmohit106:246897531@cluster0.proprgk.mongodb.net/?retryWrites=true&w=majority";
+
 // Load environment variables
 dotenv.config();
-
 // Set up Express app
 const app = express();
 app.use(express.json());

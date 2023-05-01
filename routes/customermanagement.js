@@ -16,7 +16,8 @@ router.get("/customers", async (req, res) => {
 // Get a customer by ID
 router.get("/customers/:id", async (req, res) => {
   try {
-    const customer = await Customer.findById(req.params.id);
+    //const customer = await Customer.findById(req.params.id);
+    const customer = await User.findOne({ email: req.params.email })
     if (!customer) {
       return res.status(404).json({ message: "Customer not found" });
     }
@@ -70,14 +71,14 @@ router.delete("/customers/:id", async (req, res) => {
 });
 
 // Get booking history of a customer by customer ID
-router.get("/customers/:customerId/bookings", async (req, res) => {
+router.get("/customers/:customerId", async (req, res) => {
   try {
     const customerId = req.params.customerId;
-    const customer = await Customer.findById(customerId).populate("bookings");
+    const customer = await Customer.findOne({email:"johndoe@example.com"});
     if (!customer) {
       return res.status(404).json({ message: "Customer not found" });
     }
-    res.status(200).json(customer.bookings);
+    res.status(200).json(customer);
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Failed to get customer bookings" });

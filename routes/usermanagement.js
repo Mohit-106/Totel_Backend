@@ -29,7 +29,9 @@ app.get("/users", async (req, res) => {
 // Get a user by ID
 app.get("/users/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById({_id:req.params.id});
+    const user2 = await User.findOne({email:"mohixcxcxct@gmail.com"})
+    console.log(user2);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
