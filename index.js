@@ -10,6 +10,7 @@ import roommanagementRoutes from "./routes/roommanagement.js";
 import ratemanagementRoutes from "./routes/ratemanagement.js";
 import billingmanagementRoutes from "./routes/billingmanagement.js";
 import customermanagementRoutes from "./routes/customermanagement.js";
+import auth from "./routes/auth.js";
 
 //Configuration
 dotenv.config();
@@ -29,6 +30,8 @@ app.use("/roommanagement", roommanagementRoutes);
 app.use("/ratemanagement", ratemanagementRoutes);
 app.use("/billingmanagement", billingmanagementRoutes);
 app.use("/customermanagement", customermanagementRoutes);
+app.use("/auth",auth);
+
 const port = process.env.PORT || 3001;
 
 app.listen(port, function () {
