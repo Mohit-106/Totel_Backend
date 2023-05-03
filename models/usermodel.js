@@ -3,7 +3,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import { config } from 'dotenv';
 config();
 // Set up Express app
@@ -11,7 +10,6 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-
 // Set up MongoDB connection
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -35,6 +33,5 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 export const User = mongoose.model('userModel',userSchema);
 
