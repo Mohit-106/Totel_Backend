@@ -2,7 +2,6 @@ import express from "express";
 const app = express.Router();
 import { Rate } from "../models/ratemodel.js";
 
-
 app.post("/rates", async (req, res) => {
   try {
     const newRate = new Rate(req.body);
@@ -13,7 +12,6 @@ app.post("/rates", async (req, res) => {
   }
 });
 
-
 app.get("/rates", async (req, res) => {
   try {
     const rates = await Rate.find();
@@ -22,7 +20,6 @@ app.get("/rates", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
 
 app.get("/rates/:id", getRate, (req, res) => {
   res.json(res.rate);
@@ -40,7 +37,6 @@ async function getRate(req, res, next) {
     return res.status(500).json({ message: err.message });
   }
 }
-
 
 app.patch("/rates/:id", getRate, async (req, res) => {
   if (req.body.roomType != null) {
@@ -66,7 +62,6 @@ app.patch("/rates/:id", getRate, async (req, res) => {
   }
 });
 
-
 app.delete("/rates/:id", getRate, async (req, res) => {
   try {
     await res.rate.remove();
@@ -77,4 +72,3 @@ app.delete("/rates/:id", getRate, async (req, res) => {
 });
 
 export default app;
-
