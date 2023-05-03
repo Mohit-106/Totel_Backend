@@ -4,10 +4,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-const DATABASE_URL="mongodb+srv://mwkmohit106:246897531@cluster0.proprgk.mongodb.net/?retryWrites=true&w=majority";
-
-// Load environment variables
-dotenv.config();
+import { config } from 'dotenv';
+config();
 // Set up Express app
 const app = express();
 app.use(express.json());
@@ -16,7 +14,7 @@ app.use(cors());
 
 // Set up MongoDB connection
 mongoose
-  .connect(DATABASE_URL, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
