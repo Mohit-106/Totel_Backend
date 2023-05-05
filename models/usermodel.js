@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 // Set up MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(process.env.Totel_DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
