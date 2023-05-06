@@ -1,8 +1,15 @@
 import express from "express";
-const app = express.Router();
+const reservationRouter = express.Router();
 import { Reservation } from "../models/reservationmodel.js";
 
-app.post("/reservations", async (req, res) => {
+reservationRouter.route("/").get(getReservations).post(setReservation);
+reservationRouter
+  .route("/:id")
+  .get(getReservationsByID)
+  .patch(updateReservationByID)
+  .delete(deleteReservationByID);
+
+async function setReservation(req, res) {
   try {
     const reservation = new Reservation(req.body);
     await reservation.save();
@@ -10,18 +17,20 @@ app.post("/reservations", async (req, res) => {
   } catch (error) {
     res.status(400).send(error);
   }
-});
+}
 
-app.get("/reservations", async (req, res) => {
+//Get Reservations
+async function getReservations(req, res) {
   try {
     const reservations = await Reservation.find();
     res.send(reservations);
   } catch (error) {
     res.status(500).send(error);
   }
-});
+}
 
-app.get("/reservations/:id", async (req, res) => {
+//Get Reservations by ID
+async function getReservationsByID(req, res) {
   try {
     const reservation = await Reservation.findById(req.params.id);
     if (!reservation) {
@@ -31,37 +40,30 @@ app.get("/reservations/:id", async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
-});
+}
 
-app.patch("/reservations/:id", async (req, res) => {
-  const updates = Object.keys(req.body);
-  const allowedUpdates = [
-    "guestName",
-    "checkInDate",
-    "checkOutDate",
-    "roomNumber",
-    "status",
-  ];
-  const isValidOperation = updates.every((update) =>
-    allowedUpdates.includes(update)
-  );
-  if (!isValidOperation) {
-    return res.status(400).send({ error: "Invalid updates!" });
-  }
+// UPDATE Reservation
+async function updateReservationByID(req, res) {
   try {
-    const reservation = await Reservation.findById(req.params.id);
+    const { guestName, checkInDate, checkOutDate, roomNumber, status } =
+      req.body;
+    const reservation = await Reservation.findByIdAndUpdate(
+      req.params.id,
+      { guestName, checkInDate, checkOutDate, roomNumber, status },
+      { new: true }
+    );
     if (!reservation) {
-      return res.status(404).send();
+      return res.status(404).json({ message: "reservation not found" });
     }
-    updates.forEach((update) => (reservation[update] = req.body[update]));
-    await reservation.save();
-    res.send(reservation);
+    res.status(200).json(reservation);
   } catch (error) {
-    res.status(400).send(error);
+    console.log(error);
+    res.status(400).json({ message: "Failed to update Reservation" });
   }
-});
+}
 
-app.delete("/reservations/:id", async (req, res) => {
+//Delete Reservation By ID
+async function deleteReservationByID(req, res) {
   try {
     const reservation = await Reservation.findByIdAndDelete(req.params.id);
     if (!reservation) {
@@ -71,6 +73,6 @@ app.delete("/reservations/:id", async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
-});
+}
 
-export default app;
+export default reservationRouter;

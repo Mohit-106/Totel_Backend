@@ -1,9 +1,19 @@
 import express from "express";
 import { User } from "../models/usermodel.js";
-const app = express();
+const userRouter = express();
+
+userRouter
+.route('/')
+.get(getUsers)
+.post(setUser)
+
+userRouter.route('/:id')
+.get(getUserById)
+.patch(updateUserByID)
+.delete(deleteUserByID);
 
 // Create a new user
-app.post("/users", async (req, res) => {
+async function setUser(req, res){
   try {
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
@@ -13,10 +23,10 @@ app.post("/users", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to create user" });
   }
-});
+};
 
 // Get all users
-app.get("/users", async (req, res) => {
+async function getUsers(req, res){
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -24,14 +34,14 @@ app.get("/users", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to get users" });
   }
-});
+};
 
 // Get a user by ID
-app.get("/users/:id", async (req, res) => {
+async function getUserById(req, res){
   try {
     const user = await User.findById({_id:req.params.id});
     const user2 = await User.findOne({email:"mohixcxcxct@gmail.com"})
-    console.log(user2);
+    console.log(user2); 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -40,10 +50,10 @@ app.get("/users/:id", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to get user" });
   }
-});
+};
 
 // Update a user by ID
-app.put("/users/:id", async (req, res) => {
+async function updateUserByID(req, res){
   try {
     const { name, email, password, role } = req.body;
     const user = await User.findByIdAndUpdate(
@@ -59,10 +69,10 @@ app.put("/users/:id", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to update user" });
   }
-});
+};
 
 // Delete a user by ID
-app.delete("/users/:id", async (req, res) => {
+async function deleteUserByID(req, res){
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
@@ -73,9 +83,9 @@ app.delete("/users/:id", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to update user" });
   }
-});
+};
 
-export default app;
+export default userRouter;
 
 
 

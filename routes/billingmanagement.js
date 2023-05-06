@@ -1,8 +1,16 @@
 import express from "express";
-const app = express.Router();
+const billing = express.Router();
 import { Bill } from "../models/billingmodel.js";
 
-app.post("/bills", async (req, res) => {
+billing.route("/").get(getBilling).post(setBilling);
+
+billing
+  .route("/:id")
+  .get(getBillingByID)
+  .patch(updateBillingByID)
+  .delete(deleteBillingByID);
+
+async function setBilling(req, res) {
   try {
     const {
       guestName,
@@ -29,9 +37,9 @@ app.post("/bills", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
-});
+}
 
-app.put("/bills/:id", async (req, res) => {
+async function getBilling(req, res) {
   try {
     const { id } = req.params;
     const { paidAmount } = req.body;
@@ -51,9 +59,9 @@ app.put("/bills/:id", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
-});
+}
 
-app.delete("/bills/:id", async (req, res) => {
+async function deleteBillingByID(req, res) {
   try {
     const { id } = req.params;
 
@@ -68,9 +76,9 @@ app.delete("/bills/:id", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
-});
+}
 
-app.get("/bills/:id", async (req, res) => {
+async function getBillingByID(req, res) {
   try {
     const { id } = req.params;
 
@@ -85,6 +93,21 @@ app.get("/bills/:id", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
-});
+}
 
-export default app;
+async function updateBillingByID(req, res) {
+  try {
+    const bill = await Bill.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!bill) {
+      return res.status(404).json({ message: "bill not found" });
+    }
+    res.status(200).json(bill);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to update bill" });
+  }
+}
+
+export default billing;

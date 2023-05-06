@@ -1,74 +1,83 @@
 import express from "express";
-const app = express.Router();
+const rateRouter = express.Router();
 import { Rate } from "../models/ratemodel.js";
 
-app.post("/rates", async (req, res) => {
-  try {
-    const newRate = new Rate(req.body);
-    await newRate.save();
-    res.status(201).json(newRate);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+rateRouter.route("/").get(getRate).post(setRate);
+rateRouter
+  .route("/:id")
+  .get(getRateById)
+  .patch(updateRateByID)
+  .delete(deleteRateByID);
 
-app.get("/rates", async (req, res) => {
+// Create a new rate
+async function setRate(req, res) {
   try {
-    const rates = await Rate.find();
-    res.json(rates);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/rates/:id", getRate, (req, res) => {
-  res.json(res.rate);
-});
-
-async function getRate(req, res, next) {
-  try {
-    const rate = await Rate.findById(req.params.id);
-    if (!rate) {
-      return res.status(404).json({ message: "Rate not found" });
-    }
-    res.rate = rate;
-    next();
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
+    const { roomType, rate, startDate, endDate, description } = req.body;
+    const data = new Rate({ roomType, rate, startDate, endDate, description });
+    await data.save();
+    res.status(201).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to create" });
   }
 }
 
-app.patch("/rates/:id", getRate, async (req, res) => {
-  if (req.body.roomType != null) {
-    res.rate.roomType = req.body.roomType;
-  }
-  if (req.body.rate != null) {
-    res.rate.rate = req.body.rate;
-  }
-  if (req.body.startDate != null) {
-    res.rate.startDate = req.body.startDate;
-  }
-  if (req.body.endDate != null) {
-    res.rate.endDate = req.body.endDate;
-  }
-  if (req.body.description != null) {
-    res.rate.description = req.body.description;
-  }
+// Get all rates
+async function getRate(req, res) {
   try {
-    const updatedRate = await res.rate.save();
-    res.json(updatedRate);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const data = await Rate.find();
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to get" });
   }
-});
+}
 
-app.delete("/rates/:id", getRate, async (req, res) => {
+// Get a rate by ID
+async function getRateById(req, res) {
   try {
-    await res.rate.remove();
-    res.json({ message: "Rate deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const data = await Rate.findById({ _id: req.params.id });
+    if (!data) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to get user" });
   }
-});
+}
 
-export default app;
+// Update a user by ID
+async function updateRateByID(req, res) {
+  try {
+    const { roomType, rate, startDate, endDate, description } = req.body;
+    const data = await Rate.findByIdAndUpdate(
+      req.params.id,
+      { roomType, rate, startDate, endDate, description },
+      { new: true }
+    );
+    if (!data) {
+      return res.status(404).json({ message: "Data not found" });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to update data" });
+  }
+}
+
+// Delete a user by ID
+async function deleteRateByID(req, res) {
+  try {
+    const user = await Rate.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "not found" });
+    }
+    res.status(204).send(user);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Failed to update " });
+  }
+}
+
+export default rateRouter;

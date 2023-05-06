@@ -1,9 +1,19 @@
 import express from "express";
-const router = express.Router();
 import  {Customer} from "../models/customermodel.js"
+const customerRouter = express();
+
+customerRouter.route("/")
+.get(getCustomer)
+.post(setCustomer);
+
+customerRouter
+  .route("/:id")
+  .get(getCustomerByID)
+  .patch(updateCustomerByID)
+  .delete(deleteCustomerByID)
 
 // Get all customers
-router.get("/customers", async (req, res) => {
+async function getCustomer(req, res){
   try {
     const customers = await Customer.find();
     res.status(200).json(customers);
@@ -11,25 +21,24 @@ router.get("/customers", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to get customers" });
   }
-});
+};
 
 // Get a customer by ID
-router.get("/customers/:id", async (req, res) => {
+async function  getCustomerByID(req, res){
   try {
-    //const customer = await Customer.findById(req.params.id);
-    const customer = await User.findOne({ email: req.params.email })
-    if (!customer) {
-      return res.status(404).json({ message: "Customer not found" });
+    const data = await Customer.findById({ _id: req.params.id });
+    if (!data) {
+      return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(customer);
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Failed to get customer" });
+    res.status(400).json({ message: "Failed to get user" });
   }
-});
+};
 
 // Create a new customer
-router.post("/customers", async (req, res) => {
+async function setCustomer(req, res){
   try {
     const customer = new Customer(req.body);
     await customer.save();
@@ -38,10 +47,10 @@ router.post("/customers", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to create customer" });
   }
-});
+};
 
 // Update a customer by ID
-router.put("/customers/:id", async (req, res) => {
+async function updateCustomerByID(req, res){
   try {
     const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -54,10 +63,10 @@ router.put("/customers/:id", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to update customer" });
   }
-});
+};
 
 // Delete a customer by ID
-router.delete("/customers/:id", async (req, res) => {
+async function deleteCustomerByID(req, res){
   try {
     const user = await Customer.findByIdAndDelete(req.params.id);
     if (!user) {
@@ -68,21 +77,6 @@ router.delete("/customers/:id", async (req, res) => {
     console.log(error);
     res.status(400).json({ message: "Failed to update user" });
   }
-});
+};
 
-// Get booking history of a customer by customer ID
-router.get("/customers/:customerId", async (req, res) => {
-  try {
-    const customerId = req.params.customerId;
-    const customer = await Customer.findOne({email:"johndoe@example.com"});
-    if (!customer) {
-      return res.status(404).json({ message: "Customer not found" });
-    }
-    res.status(200).json(customer);
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ message: "Failed to get customer bookings" });
-  }
-});
-
-export default router;
+export default customerRouter;
