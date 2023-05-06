@@ -12,7 +12,6 @@ import billingmanagementRoutes from "./routes/billingmanagement.js";
 import customermanagementRoutes from "./routes/customermanagement.js";
 import auth from "./routes/auth.js";
 
-
 //Configuration
 dotenv.config();
 const app = express();
@@ -33,10 +32,9 @@ app.use("/billingmanagement", billingmanagementRoutes);
 app.use("/customermanagement", customermanagementRoutes);
 app.use("/auth",auth);
 
-const port = process.env.PORT || 3001;
-
+const port = process.env.PORT || 3000;
 app.listen(port, function () {
-    console.log("server started at port 3001");
+    console.log("server started at port 3000");
 })
 
 
