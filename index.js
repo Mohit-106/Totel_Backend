@@ -24,12 +24,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 //ROUTES 
-app.use("/usermanagement", usermanagementRoutes);
-app.use("/reservationmanagement", reservationmanagementRoutes);
-app.use("/roommanagement", roommanagementRoutes);
-app.use("/ratemanagement", ratemanagementRoutes);
-app.use("/billingmanagement", billingmanagementRoutes);
-app.use("/customermanagement", customermanagementRoutes);
+app.use("/users", usermanagementRoutes);
+app.use("/reservations", reservationmanagementRoutes);
+app.use("/rooms", roommanagementRoutes);
+app.use("/rates", ratemanagementRoutes);
+app.use("/bills", billingmanagementRoutes);
+app.use("/customers", customermanagementRoutes);
 app.use("/auth",auth);
 
 const port = process.env.PORT || 3000;
