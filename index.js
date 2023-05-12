@@ -11,6 +11,7 @@ import ratemanagementRoutes from "./routes/ratemanagement.js";
 import billingmanagementRoutes from "./routes/billingmanagement.js";
 import customermanagementRoutes from "./routes/customermanagement.js";
 import auth from "./routes/auth.js";
+import chat from "./routes/chatroom.js"
 
 //Configuration
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/rates", ratemanagementRoutes);
 app.use("/bills", billingmanagementRoutes);
 app.use("/customers", customermanagementRoutes);
 app.use("/auth",auth);
+app.use("/chat",chat);
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {

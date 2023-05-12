@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const billSchema = new mongoose.Schema({
   guestName: {
     type: String,
@@ -35,7 +34,6 @@ const billSchema = new mongoose.Schema({
     required: true,
   },
 });
-
 export const Bill = mongoose.model('Bill', billSchema);
 
 
